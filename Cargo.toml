@@ -1,0 +1,14 @@
+[package]
+name = "makai"
+version = "0.1.0"
+authors = ["David Gronlund"]
+edition = "2021"
+description = "Utilities for EDA programs"
+readme = "README.md"
+repository = "https://github.com/dagronlund/makai"
+license = "MIT"
+keywords = ["eda"]
+
+[dependencies]
+bytes = "1.1.0"
+crossbeam = "0.8.1"
