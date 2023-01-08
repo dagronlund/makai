@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 
 #[derive(Debug)]
 struct MessagesInternal {
-    buffer: Vec<Box<dyn Any>>,
+    buffer: Vec<Box<dyn Any + Send + Sync>>,
     activity: bool,
 }
 
@@ -23,13 +23,13 @@ impl Messages {
         }
     }
 
-    pub fn push_any(&self, message: Box<dyn Any>) {
+    pub fn push_any(&self, message: Box<dyn Any + Send + Sync>) {
         let mut internal = self.internal.lock().unwrap();
         internal.activity = true;
         internal.buffer.push(message);
     }
 
-    pub fn append_any(&self, mut messages: Vec<Box<dyn Any>>) {
+    pub fn append_any(&self, mut messages: Vec<Box<dyn Any + Send + Sync>>) {
         let mut internal = self.internal.lock().unwrap();
         internal.activity = true;
         internal.buffer.append(&mut messages);
@@ -37,7 +37,7 @@ impl Messages {
 
     pub fn push<T>(&self, message: T)
     where
-        T: 'static,
+        T: 'static + Send + Sync,
     {
         let mut internal = self.internal.lock().unwrap();
         internal.activity = true;
@@ -46,7 +46,7 @@ impl Messages {
 
     pub fn append<T>(&self, messages: Vec<T>)
     where
-        T: 'static,
+        T: 'static + Send + Sync,
     {
         let mut internal = self.internal.lock().unwrap();
         internal.activity = true;
